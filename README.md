@@ -108,6 +108,7 @@ pip install -r requirements.txt
 From the project root (where `main.py` lives):
 
 ```bash
+cd api
 uvicorn main:app --reload
 ```
 
