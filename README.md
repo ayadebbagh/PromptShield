@@ -82,7 +82,7 @@ brew install git-lfs        # macOS
 git lfs install
 
 # 2. Clone the repo, LFS will automatically pull the .safetensors weights
-git clone <your-repo-url>
+git clone https://github.com/ayadebbagh/PromptShield/tree/main
 cd PromptShield
 
 # 3. Confirm the model file was pulled correctly (should be ~250MB, not 134 bytes)
