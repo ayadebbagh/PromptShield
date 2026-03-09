@@ -8,17 +8,17 @@ A prompt injection and PII detection firewall for LLM-based applications. Prompt
 
 When a user sends a prompt to an LLM-powered app, PromptShield intercepts it and runs two checks in parallel:
 
-1. **Regex scan**:pattern-matches against a library of known attack signatures (instruction overrides, DAN prompts, delimiter injection, system prompt extraction, role manipulation, etc.) and PII patterns (email, SSN, phone number, credit card)
-2. **ML classifier**:runs the prompt through a fine-tuned DistilBERT model trained on ~5,800 labelled examples from three public datasets
+1. **Regex scan**: pattern-matches against a library of known attack signatures (instruction overrides, DAN prompts, delimiter injection, system prompt extraction, role manipulation, etc.) and PII patterns (email, SSN, phone number, credit card)
+2. **ML classifier**: runs the prompt through a fine-tuned DistilBERT model trained on ~5,800 labelled examples from three public datasets
 
 Both scores are combined into a single risk score (0–100), which is passed to a policy engine that returns one of four actions:
 
 | Action | Meaning |
 |--------|---------|
 | `allow` | Safe to forward to the LLM |
-| `rewrite` | Medium risk:prompt should be sanitised first |
-| `redact` | PII detected:sensitive fields must be removed |
-| `block` | High-risk injection or jailbreak:do not forward |
+| `rewrite` | Medium risk: prompt should be sanitised first |
+| `redact` | PII detected: sensitive fields must be removed |
+| `block` | High-risk injection or jailbreak: do not forward |
 
 ---
 
@@ -62,8 +62,8 @@ prompt
 
 FastAPI REST API (`main.py`) with two endpoints:
 
-- `POST /scan`:scan a single prompt
-- `POST /scan/batch`:scan up to 50 prompts at once
+- `POST /scan`: scan a single prompt
+- `POST /scan/batch`: scan up to 50 prompts at once
 
 ### Demo UI
 
@@ -76,7 +76,7 @@ A standalone `index.html` (no build step, no dependencies) that connects to the 
 ```
 PromptShield/
 ├── api/
-│   └── scan_pipeline.py         # Core pipeline:scan_prompt(), scan_batch(), scan_and_raise()
+│   └── scan_pipeline.py         # Core pipeline: scan_prompt(), scan_batch(), scan_and_raise()
 ├── filters/
 │   ├── __init__.py
 │   └── regex_filter.py          # Regex + PII pattern matching
@@ -106,17 +106,30 @@ PromptShield/
 **Requirements: Python 3.10+**
 
 ```bash
-# 1. Clone and enter the project
+# 1. Install git-lfs if you don't have it (needed to pull the model weights)
+brew install git-lfs        # macOS
+# sudo apt install git-lfs  # Ubuntu/Debian
+git lfs install
+
+# 2. Clone the repo, LFS will automatically pull the .safetensors weights
 git clone <your-repo-url>
 cd PromptShield
 
-# 2. Create and activate a virtual environment
+# 3. Confirm the model file was pulled correctly (should be ~250MB, not 134 bytes)
+ls -lh models/prompt_firewall_model/
+
+# 4. Create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# 3. Install dependencies
-pip install fastapi uvicorn transformers torch scikit-learn pandas datasets
+# 5. Install dependencies
+pip install -r requirements.txt
 ```
+
+> **If the model file looks like a text pointer (~134 bytes)** it means LFS didn't pull it. Fix with:
+> ```bash
+> git lfs pull
+> ```
 
 ---
 
@@ -233,7 +246,7 @@ Runs 34 tests across regex filter, policy engine, ML model, and the full end-to-
 ```python
 from api.scan_pipeline import scan_prompt, scan_and_raise, BlockedPromptError
 
-# Option 1:check the result manually
+# Option 1: check the result manually
 result = scan_prompt(user_prompt)
 if result.action == "block":
     return "This request cannot be processed."
@@ -241,7 +254,7 @@ elif result.action == "redact":
     # strip PII before forwarding
     ...
 
-# Option 2:raise on block
+# Option 2: raise on block
 try:
     scan_and_raise(user_prompt)
     response = llm.complete(user_prompt)
