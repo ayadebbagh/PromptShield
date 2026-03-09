@@ -71,36 +71,6 @@ A standalone `index.html` (no build step, no dependencies) that connects to the 
 
 ---
 
-## Project Structure
-
-```
-PromptShield/
-├── api/
-│   └── scan_pipeline.py         # Core pipeline: scan_prompt(), scan_batch(), scan_and_raise()
-├── filters/
-│   ├── __init__.py
-│   └── regex_filter.py          # Regex + PII pattern matching
-├── models/
-│   ├── __init__.py
-│   ├── ml_model.py              # DistilBERT inference wrapper
-│   └── prompt_firewall_model/   # Saved model weights + tokenizer
-│       ├── config.json
-│       ├── tokenizer.json
-│       ├── tokenizer_config.json
-│       └── training_args.bin
-├── policy_engine/
-│   ├── __init__.py
-│   └── policy_engine.py         # Maps risk score + categories → action
-├── main.py                      # FastAPI app
-├── train_model.py               # Training script
-├── prepare_dataset.py           # Dataset download + merge
-├── combined_dataset.csv         # Merged training data
-├── test_pipeline.py             # Full test suite (34 tests)
-└── index.html                   # Demo UI
-```
-
----
-
 ## Setup
 
 **Requirements: Python 3.10+**
