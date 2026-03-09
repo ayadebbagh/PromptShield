@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from typing import List
 import time
 
-from scan_pipeline import scan_prompt, scan_batch, BlockedPromptError
+from api.scan_pipeline import scan_prompt, scan_batch, BlockedPromptError
 
 app = FastAPI(
     title="PromptShield API",

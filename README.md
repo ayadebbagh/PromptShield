@@ -108,14 +108,13 @@ pip install -r requirements.txt
 From the project root (where `main.py` lives):
 
 ```bash
-cd api
-uvicorn main:app --reload
+uvicorn api.main:app --reload
 ```
 
 If port 8000 is already in use:
 
 ```bash
-uvicorn main:app --reload --port 8001
+uvicorn api.main:app --reload --port 8001
 ```
 
 The API will be live at `http://127.0.0.1:8000` (or whichever port you chose).
